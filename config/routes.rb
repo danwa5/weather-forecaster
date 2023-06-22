@@ -4,5 +4,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "searches#show"
 
-  resource :search, only: [:show]
+  resource :search, only: [:show] do
+    collection do
+      get :autocomplete
+    end
+  end
 end

@@ -13,13 +13,26 @@ class SearchesController < ApplicationController
     end
   end
 
+  # GET /search/autocomplete?search_term=<ADDRESS>
+  def autocomplete
+    res = FetchSuggestedAddresses.new(search_term).call
+    data = res.success? ? res.value! : {}
+    render json: data
+  end
+
   private
 
   def search_params
-    params.permit(:zip_code)
+    params.permit(:search_term)
+  end
+
+  def search_term
+    search_params['search_term']
   end
 
   def zip_code
-    search_params['zip_code']
+    search_term.split(',').last
+  rescue
+    nil
   end
 end

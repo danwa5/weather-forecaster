@@ -1,5 +1,6 @@
-<%= form_with url: search_path, method: :get do |f| %>
-  <%= f.text_field :zip_code %>
+<%= form_with url: search_path, method: :get, id: :search_form do |f| %>
+  <%= f.text_field :search_term, id: "search_term", size: 50, autocomplete: "off", onKeyUp: "findSuggestions(this.value)" %>
+  <ol id="autocomplete-results-container" style="display: none"></ol>
   <%= f.submit "Search", name: nil %>
 <% end %>
 

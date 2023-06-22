@@ -23,7 +23,7 @@ RSpec.describe 'Searches', type: :request do
         res = double(success?: false, exception: { class: 'ErrorClass', message: 'ErrorMessage' })
         expect(service).to receive(:call).and_return(res)
 
-        get search_path, params: { zip_code: zip_code }
+        get search_path, params: { search_term: zip_code }
 
         expect(response.status).to eq(302)
         expect(response).to redirect_to(search_path)
@@ -55,10 +55,42 @@ RSpec.describe 'Searches', type: :request do
         res = double(success?: true, value!: data)
         expect(service).to receive(:call).and_return(res)
 
-        get search_path, params: { zip_code: zip_code }
+        get search_path, params: { search_term: zip_code }
 
         expect(response.status).to eq(200)
         expect(flash[:error]).to be_nil
+      end
+    end
+  end
+
+  describe 'GET /search/autocomplete' do
+    before do
+      expect(FetchSuggestedAddresses).to receive(:new).with(zip_code).and_return(service)
+    end
+
+    context 'when api service call succeeds' do
+      it 'renders data' do
+        results = double(success?: true, value!: '{ "suggestions": []}')
+        expect(service).to receive(:call).once.and_return(results)
+
+        get autocomplete_search_path, params: { search_term: zip_code }
+        json = JSON.parse(response.body)
+
+        expect(response.status).to eq(200)
+        expect(json['suggestions']).not_to be_nil
+      end
+    end
+
+    context 'when api service call fails' do
+      it 'renders no data' do
+        results = double(success?: false)
+        expect(service).to receive(:call).once.and_return(results)
+
+        get autocomplete_search_path, params: { search_term: zip_code }
+        json = JSON.parse(response.body)
+
+        expect(response.status).to eq(200)
+        expect(json['suggestions']).to be_nil
       end
     end
   end
