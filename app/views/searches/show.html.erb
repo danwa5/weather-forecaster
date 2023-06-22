@@ -6,6 +6,10 @@
 <% if @results %>
   <table>
     <tr>
+      <td>Cached?</td>
+      <td><%= @results[:cached] %></td>
+    </tr>
+    <tr>
       <td>Location</td>
       <td><%= @results[:name] %>, <%= @results[:region] %>, <%= @results[:country] %></td>
     </tr>
