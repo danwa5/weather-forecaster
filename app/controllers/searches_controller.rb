@@ -2,7 +2,15 @@
 class SearchesController < ApplicationController
   # GET /search
   def show
-    FetchWeatherForecast.new(zip_code).call
+    if zip_code
+      res = FetchWeatherForecast.new(zip_code).call
+
+      if res.success?
+        @results = res.value!
+      else
+        redirect_to search_path, flash: { error: res.exception }
+      end
+    end
   end
 
   private

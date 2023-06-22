@@ -1,0 +1,31 @@
+<%= form_with url: search_path, method: :get do |f| %>
+  <%= f.text_field :zip_code %>
+  <%= f.submit "Search", name: nil %>
+<% end %>
+
+<% if @results %>
+  <table>
+    <tr>
+      <td>Location</td>
+      <td><%= @results[:name] %>, <%= @results[:region] %>, <%= @results[:country] %></td>
+    </tr>
+    <tr>
+      <td>Current Weather</td>
+      <td>
+        <%= @results[:current_weather][:temp_c] %>C /
+        <%= @results[:current_weather][:temp_f] %>F
+        (<%= @results[:current_weather][:condition] %>)
+      </td>
+    </tr>
+    <tr>
+      <td>Forecast</td>
+      <td>
+        High <%= @results[:forecasted_weather][:max_temp_c] %>C /
+        <%= @results[:forecasted_weather][:max_temp_f] %>F<br/>
+        Low <%= @results[:forecasted_weather][:min_temp_c] %>C /
+        <%= @results[:forecasted_weather][:min_temp_f] %>F<br/>
+        (<%= @results[:forecasted_weather][:condition] %>)
+      </td>
+    </tr>
+  </table>
+<% end %>
