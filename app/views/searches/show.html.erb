@@ -8,30 +8,27 @@
     <div class="results">
       <table>
         <tr>
-          <td>Cached?</td>
-          <td><%= @results[:cached] %></td>
-        </tr>
-        <tr>
           <td>Location</td>
           <td><%= @results[:name] %>, <%= @results[:region] %>, <%= @results[:country] %></td>
         </tr>
         <tr>
-          <td>Current Weather</td>
+          <td>Current </td>
           <td>
-            <%= @results[:current_weather][:temp_c] %>C /
-            <%= @results[:current_weather][:temp_f] %>F
-            (<%= @results[:current_weather][:condition] %>)
+            <%= image_tag(@results[:current_weather][:icon], alt: @results[:current_weather][:condition]) %><br/>
+            <%= @results[:current_weather][:temp_f] %>F / <%= @results[:current_weather][:temp_c] %>C
           </td>
         </tr>
         <tr>
           <td>Forecast</td>
           <td>
-            High <%= @results[:forecasted_weather][:max_temp_c] %>C /
-            <%= @results[:forecasted_weather][:max_temp_f] %>F<br/>
-            Low <%= @results[:forecasted_weather][:min_temp_c] %>C /
-            <%= @results[:forecasted_weather][:min_temp_f] %>F<br/>
-            (<%= @results[:forecasted_weather][:condition] %>)
+            <%= image_tag(@results[:forecasted_weather][:icon], alt: @results[:forecasted_weather][:condition]) %><br/>
+            <%= @results[:forecasted_weather][:max_temp_f] %>F / <%= @results[:forecasted_weather][:max_temp_c] %>C (High)<br/>
+            <%= @results[:forecasted_weather][:min_temp_f] %>F / <%= @results[:forecasted_weather][:min_temp_c] %>C (Low)
           </td>
+        </tr>
+        <tr>
+          <td>Cached?</td>
+          <td><%= @results[:cached] || 'false' %></td>
         </tr>
       </table>
     </div>

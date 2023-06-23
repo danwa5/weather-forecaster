@@ -42,14 +42,16 @@ RSpec.describe 'Searches', type: :request do
           current_weather: {
             temp_c: 10,
             temp_f: 60,
-            condition: 'Foggy'
+            condition: 'Foggy',
+            icon: 'https://cdn.weatherapi.com/weather/64x64/day/113.png'
           },
           forecasted_weather: {
             max_temp_c: 20,
             max_temp_f: 70.0,
             min_temp_c: 5.5,
             min_temp_f: 49.9,
-            condition: 'Really Foggy'
+            condition: 'Really Foggy',
+            icon: 'https://cdn.weatherapi.com/weather/64x64/day/116.png'
           }
         }
         res = double(success?: true, value!: data)

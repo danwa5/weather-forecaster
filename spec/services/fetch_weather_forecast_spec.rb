@@ -11,11 +11,13 @@ RSpec.describe FetchWeatherForecast do
       country: 'USA',
       current_weather: {
         condition: 'Sunny',
+        icon: 'https://cdn.weatherapi.com/weather/64x64/day/113.png',
         temp_c: 26.1,
         temp_f: 79
       },
       forecasted_weather: {
         condition: 'Partly cloudy',
+        icon: 'https://cdn.weatherapi.com/weather/64x64/day/116.png',
         max_temp_c: 25.8,
         max_temp_f: 78.4,
         min_temp_c: 7.3,

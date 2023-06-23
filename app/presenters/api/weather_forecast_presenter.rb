@@ -26,7 +26,8 @@ module Api
       {
         temp_c: current_weather['temp_c'],
         temp_f: current_weather['temp_f'],
-        condition: current_weather['condition']['text']
+        condition: current_weather['condition']['text'],
+        icon: format_icon_url(current_weather['condition']['icon'])
       }
     end
 
@@ -36,7 +37,8 @@ module Api
         max_temp_f: forecasted_weather_day['maxtemp_f'],
         min_temp_c: forecasted_weather_day['mintemp_c'],
         min_temp_f: forecasted_weather_day['mintemp_f'],
-        condition: forecasted_weather_day['condition']['text']
+        condition: forecasted_weather_day['condition']['text'],
+        icon: format_icon_url(forecasted_weather_day['condition']['icon'])
       }
     end
 
@@ -50,6 +52,12 @@ module Api
 
     def forecasted_weather_day
       @forecasted_weather_day ||= json['forecast']['forecastday'][0]['day']
+    end
+
+    def format_icon_url(path)
+      return if path =~ /^https?/
+
+      "https:#{path}"
     end
   end
 end
