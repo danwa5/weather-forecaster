@@ -1,24 +1,55 @@
-# README
+![Screenshot](https://mcdz-assets.s3.us-west-1.amazonaws.com/weather-forecaster.png)
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Weather Forecaster
 
-Things you may want to cover:
+This is a Rails 7 app that allows a user to look up the current and forecasted weather
+for a location. A location can be a specific address, a point of interest, or a zip
+code. Upon typing the address, the app will look up address suggestions from Mapbox API
+and display them below the search field. The user can select an address to get weather
+details.
 
-* Ruby version
+## Features
 
-* System dependencies
+-   Address suggestions are provided by [Mapbox API](https://docs.mapbox.com/api/search/search-box/)
+-   Weather details are provided by [Weather API](https://rapidapi.com/weatherapi/api/weatherapi-com/)
+-   Weather data is cached by zip code for 30 minutes
 
-* Configuration
+## Dependencies
 
-* Database creation
+-   Ruby 3.0.2
+-   Rails 7.0.5
+-   Bundler 2.2.22
 
-* Database initialization
+## Troubleshooting
 
-* How to run the test suite
+### Environment variables
 
-* Services (job queues, cache servers, search engines, etc.)
+The `MAPBOX_API_ACCESS_TOKEN` and `MAPBOX_API_URL` environment variables are required to fetch
+address suggestions from Mapbox API. The `WEATHER_API_URL`, `WEATHER_API_KEY`, and `WEATHER_API_HOST`
+env variables are required to access Weather API.
 
-* Deployment instructions
+Create a `.env` file and set these variables. Refer to `.env.sample` as an example.
 
-* ...
+### Caching
+
+If the caching of weather data does not appear to be working, you may need to run `rails dev:cache`
+
+## Tests
+
+Run full test suite and the test coverage will appear on the last line:
+
+```shell
+$ bundle exec rspec
+```
+
+To see test coverage details:
+
+```shell
+$ open coverage/index.html
+```
+
+To see any linting errors:
+
+```shell
+$ rubocop
+```
