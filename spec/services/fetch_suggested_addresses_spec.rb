@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FetchSuggestedAddresses do
-  let(:search_term) { %w(foo bar).sample }
+  let(:search_term) { %w[foo bar].sample }
 
   describe '#call' do
     context 'when MapboxApiService call succeeds' do
@@ -27,7 +27,7 @@ RSpec.describe FetchSuggestedAddresses do
 
         expect(res).to be_failure
         expect(res.exception.class).to eq(Errors::MapboxApiServiceError)
-        expect(res.exception.message).to eq("Error fetching address suggestions")
+        expect(res.exception.message).to eq('Error fetching address suggestions')
       end
     end
   end

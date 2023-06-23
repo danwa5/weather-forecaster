@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Searches', type: :request do
-  let(:zip_code) { ['123', 'x1y2'].sample }
+  let(:zip_code) { %w[123 x1y2].sample }
   let(:service) { double }
 
   describe 'GET /search' do
@@ -42,14 +42,14 @@ RSpec.describe 'Searches', type: :request do
           current_weather: {
             temp_c: 10,
             temp_f: 60,
-            condition: 'Foggy',
+            condition: 'Foggy'
           },
           forecasted_weather: {
             max_temp_c: 20,
             max_temp_f: 70.0,
             min_temp_c: 5.5,
             min_temp_f: 49.9,
-            condition: 'Really Foggy',
+            condition: 'Really Foggy'
           }
         }
         res = double(success?: true, value!: data)

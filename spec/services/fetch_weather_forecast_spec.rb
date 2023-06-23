@@ -6,20 +6,20 @@ RSpec.describe FetchWeatherForecast do
   let(:api_response) { File.read('spec/fixtures/api_response.json') }
   let(:forecast_data) do
     {
-      :name => "Dublin",
-      :region => "California",
-      :country => "USA",
-      :current_weather => {
-        :condition=>"Sunny",
-        :temp_c => 26.1,
-        :temp_f => 79
+      name: 'Dublin',
+      region: 'California',
+      country: 'USA',
+      current_weather: {
+        condition: 'Sunny',
+        temp_c: 26.1,
+        temp_f: 79
       },
-      :forecasted_weather => {
-        :condition => "Partly cloudy",
-        :max_temp_c => 25.8,
-        :max_temp_f => 78.4,
-        :min_temp_c => 7.3,
-        :min_temp_f => 45.1
+      forecasted_weather: {
+        condition: 'Partly cloudy',
+        max_temp_c: 25.8,
+        max_temp_f: 78.4,
+        min_temp_c: 7.3,
+        min_temp_f: 45.1
       }
     }
   end

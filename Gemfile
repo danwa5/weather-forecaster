@@ -66,5 +66,6 @@ group :development do
 end
 
 group :test do
+  gem 'rubocop-rails', require: false
   gem 'simplecov', require: false
 end

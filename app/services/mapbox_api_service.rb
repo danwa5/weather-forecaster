@@ -2,6 +2,7 @@ require 'uri'
 require 'net/http'
 require 'securerandom'
 
+# A wrapper to make http get requests to Mapbox API
 class MapboxApiService
   attr_reader :url
 
@@ -9,6 +10,9 @@ class MapboxApiService
     @url = URI(ENV['MAPBOX_API_URL'])
   end
 
+  # Make a http get request
+  #
+  # @param [Hash] search parameters
   def http_get(params)
     all_params = params.merge(tokens)
     url.query = URI.encode_www_form(all_params)

@@ -1,15 +1,15 @@
-
+# This class has all the search-related endpoints
 class SearchesController < ApplicationController
   # GET /search
   def show
-    if zip_code
-      res = FetchWeatherForecast.new(zip_code).call
+    return unless zip_code
 
-      if res.success?
-        @results = res.value!
-      else
-        redirect_to search_path, flash: { error: res.exception }
-      end
+    res = FetchWeatherForecast.new(zip_code).call
+
+    if res.success?
+      @results = res.value!
+    else
+      redirect_to search_path, flash: { error: res.exception }
     end
   end
 
@@ -32,7 +32,7 @@ class SearchesController < ApplicationController
 
   def zip_code
     search_term.split(',').last
-  rescue
+  rescue NoMethodError
     nil
   end
 end

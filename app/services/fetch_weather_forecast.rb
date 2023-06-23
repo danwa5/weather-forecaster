@@ -1,5 +1,7 @@
 require 'dry/monads'
 
+# A service object that makes an api get request with the entered search term
+# to get weather details
 class FetchWeatherForecast
   include Dry::Monads[:result, :do]
   include Dry::Monads[:try]
@@ -9,6 +11,10 @@ class FetchWeatherForecast
     @zip_code = zip_code.to_s
   end
 
+  # Make a http get request to Mapbox Api
+  #
+  # @return [Dry::Monads::Try::Value] the data when api call is successful
+  #         or [Dry::Monads::Try::Error] the error
   def call
     Try do
       # check if cached data exists for zip code
@@ -17,7 +23,10 @@ class FetchWeatherForecast
 
       # make api call to Weather Api
       res = api.http_get({ 'q' => zip_code })
-      raise Errors::WeatherApiServiceError, "Error fetching weather forecast for #{zip_code} zip/postal code" unless res.code == '200'
+
+      unless res.code == '200'
+        raise Errors::WeatherApiServiceError, "Error fetching weather forecast for #{zip_code} zip/postal code"
+      end
 
       # serialize the required forecast data
       data = Api::WeatherForecastPresenter.new(res.body).as_json
