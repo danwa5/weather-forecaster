@@ -2,9 +2,9 @@
 class SearchesController < ApplicationController
   # GET /search
   def show
-    return unless zip_code
+    return unless zip_code || search_term
 
-    res = FetchWeatherForecast.new(zip_code).call
+    res = FetchWeatherForecast.new(service_params).call
 
     if res.success?
       @results = res.value!
@@ -23,16 +23,21 @@ class SearchesController < ApplicationController
   private
 
   def search_params
-    params.permit(:search_term)
+    params.permit(:search_term, :zip_code)
   end
 
   def search_term
-    search_params['search_term']
+    search_params['search_term'].presence
   end
 
   def zip_code
-    search_term.split(',').last
-  rescue NoMethodError
-    nil
+    search_params['zip_code'].presence
+  end
+
+  def service_params
+    p = {}
+    p[:zip_code] = zip_code if zip_code
+    p[:location] = search_term if search_term
+    p
   end
 end

@@ -1,7 +1,8 @@
 <div class="search">
   <%= form_with url: search_path, method: :get, id: :search_form do |f| %>
     <%= f.text_field :search_term, id: "search_term", size: 50, autocomplete: "off", onKeyUp: "findSuggestions(this.value)", placeholder: "Address" %>
-    <ol id="autocomplete-results-container" style="display: none"></ol>
+    <%= f.hidden_field :zip_code %>
+    <ol id="suggestions-container" style="display: none"></ol>
   <% end %>
 
   <% if @results %>

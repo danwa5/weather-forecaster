@@ -5,10 +5,14 @@ require 'dry/monads'
 class FetchWeatherForecast
   include Dry::Monads[:result, :do]
   include Dry::Monads[:try]
-  attr_reader :zip_code
+  attr_reader :zip_code, :location, :search_term
 
-  def initialize(zip_code)
-    @zip_code = zip_code.to_s
+  def initialize(params)
+    @zip_code = params[:zip_code].presence
+    @location = params[:location].presence
+
+    # prioritize zip code over general location
+    @search_term = zip_code || location
   end
 
   # Make a http get request to Mapbox Api
@@ -17,16 +21,16 @@ class FetchWeatherForecast
   #         or [Dry::Monads::Try::Error] the error
   def call
     Try do
+      raise Errors::WeatherApiServiceError, 'Required param is missing' if zip_code.blank? && location.blank?
+
       # check if cached data exists for zip code
-      cached_data = fetch_cached_results(zip_code)
+      cached_data = fetch_cached_results
       return Success(cached_data) unless cached_data.nil?
 
       # make api call to Weather Api
-      res = api.http_get({ 'q' => zip_code })
+      res = api.http_get({ 'q' => search_term })
 
-      unless res.code == '200'
-        raise Errors::WeatherApiServiceError, "Error fetching weather forecast for #{zip_code} zip/postal code"
-      end
+      raise Errors::WeatherApiServiceError, "Error fetching weather forecast for '#{zip_code}'" unless res.code == '200'
 
       # serialize the required forecast data
       data = Api::WeatherForecastPresenter.new(res.body).as_json
@@ -41,11 +45,11 @@ class FetchWeatherForecast
   private
 
   def cache_results(data)
-    Rails.cache.write(zip_code, data.merge(cached: true), expires_in: 30.minutes)
+    Rails.cache.write(zip_code, data.merge(cached: true), expires_in: 30.minutes) if zip_code
   end
 
-  def fetch_cached_results(zip_code)
-    Rails.cache.read(zip_code)
+  def fetch_cached_results
+    Rails.cache.read(zip_code) if zip_code
   end
 
   def api

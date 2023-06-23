@@ -10,7 +10,7 @@ async function findSuggestions(input) {
     }
 
     const suggestions = await findAutocompleteResults(input);
-    const ol = document.getElementById('autocomplete-results-container');
+    const ol = document.getElementById('suggestions-container');
 
     // display suggestions in UI
     if (suggestions.length > 0) {
@@ -65,14 +65,14 @@ function buildListItem(suggestion, index) {
     return (
         '<li id="autocompleteOption' +
         index +
+        '" data-zip-code="' +
+        formattedZipCode +
         '" onClick="selectSuggestion(' +
         index +
         ');">' +
         suggestion.name +
         ' ' +
         suggestion.place_formatted +
-        ', ' +
-        formattedZipCode +
         '</li>'
     );
 }
@@ -102,16 +102,16 @@ function parseZipcode(suggestion) {
  * @param {Number} index The index of the selected suggestion
  */
 function selectSuggestion(index) {
-    const elem = document.getElementById('search_term');
+    const searchField = document.getElementById('search_term');
+    const zipCodeField = document.getElementById('zip_code');
+    const suggestion = document.getElementById('autocompleteOption' + index);
 
-    // display selected suggestion in search field
-    elem.value = document.getElementById(
-        'autocompleteOption' + index
-    ).innerHTML;
+    // set form fields
+    searchField.value = suggestion.innerHTML;
+    zipCodeField.value = suggestion.getAttribute('data-zip-code');
 
     // remove suggestions
-    document.getElementById('autocomplete-results-container').style.display =
-        'none';
+    document.getElementById('suggestions-container').style.display = 'none';
 
     // submit form
     document.getElementById('search_form').submit();

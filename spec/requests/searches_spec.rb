@@ -18,12 +18,13 @@ RSpec.describe 'Searches', type: :request do
 
     context 'when api service call fails' do
       it 'redirects to search page with error message' do
-        expect(FetchWeatherForecast).to receive(:new).with(zip_code).and_return(service)
+        expect(FetchWeatherForecast).to receive(:new)
+          .with({ zip_code: zip_code }).and_return(service)
 
         res = double(success?: false, exception: { class: 'ErrorClass', message: 'ErrorMessage' })
         expect(service).to receive(:call).and_return(res)
 
-        get search_path, params: { search_term: zip_code }
+        get search_path, params: { zip_code: zip_code }
 
         expect(response.status).to eq(302)
         expect(response).to redirect_to(search_path)
@@ -33,7 +34,8 @@ RSpec.describe 'Searches', type: :request do
 
     context 'when api service call is successful' do
       it 'displays the data' do
-        expect(FetchWeatherForecast).to receive(:new).with(zip_code).and_return(service)
+        expect(FetchWeatherForecast).to receive(:new)
+          .with({ zip_code: zip_code }).and_return(service)
 
         data = {
           name: 'San Francisco',
@@ -57,7 +59,7 @@ RSpec.describe 'Searches', type: :request do
         res = double(success?: true, value!: data)
         expect(service).to receive(:call).and_return(res)
 
-        get search_path, params: { search_term: zip_code }
+        get search_path, params: { zip_code: zip_code }
 
         expect(response.status).to eq(200)
         expect(flash[:error]).to be_nil
