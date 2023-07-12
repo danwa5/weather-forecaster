@@ -25,11 +25,13 @@ RSpec.describe FetchWeatherForecast do
     }
   end
 
-  describe '#call' do
+  it { expect(described_class).to be < ApplicationService }
+
+  describe '.call' do
     context 'when params are missing' do
       it 'returns a WeatherApiServiceError exception' do
         params = { zip_code: nil, locaton: nil }
-        res = described_class.new(params).call
+        res = described_class.call(params)
 
         expect(res).to be_failure
         expect(res.exception.class).to eq(Errors::WeatherApiServiceError)
@@ -45,7 +47,7 @@ RSpec.describe FetchWeatherForecast do
         expect_any_instance_of(WeatherApiService).not_to receive(:http_get)
 
         params = { zip_code: zip_code, locaton: nil }
-        res = described_class.new(params).call
+        res = described_class.call(params)
 
         expect(res).to be_success
         expect(res.value!).to eq(forecast_data)
@@ -67,7 +69,7 @@ RSpec.describe FetchWeatherForecast do
             .with(zip_code.to_s, forecast_data.merge(cached: true), expires_in: 30.minutes).once
 
           params = { zip_code: zip_code, location: nil }
-          res = described_class.new(params).call
+          res = described_class.call(params)
 
           expect(res).to be_success
           expect(res.value!).to eq(forecast_data)
@@ -86,7 +88,7 @@ RSpec.describe FetchWeatherForecast do
           expect_any_instance_of(Api::WeatherForecastPresenter).to receive(:as_json).and_call_original
 
           params = { zip_code: '', location: 'Dublin, CA' }
-          res = described_class.new(params).call
+          res = described_class.call(params)
 
           expect(res).to be_success
           expect(res.value!).to eq(forecast_data)
@@ -101,7 +103,7 @@ RSpec.describe FetchWeatherForecast do
           .and_return(double(code: '400'))
 
         params = { zip_code: zip_code, location: nil }
-        res = described_class.new(params).call
+        res = described_class.call(params)
 
         expect(res).to be_failure
         expect(res.exception.class).to eq(Errors::WeatherApiServiceError)

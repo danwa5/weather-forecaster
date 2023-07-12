@@ -2,7 +2,7 @@ require 'dry/monads'
 
 # A service object that makes an api get request with the entered search term
 # to get weather details
-class FetchWeatherForecast
+class FetchWeatherForecast < ApplicationService
   include Dry::Monads[:result, :do]
   include Dry::Monads[:try]
   attr_reader :zip_code, :location, :search_term

@@ -4,7 +4,7 @@ class SearchesController < ApplicationController
   def show
     return unless zip_code || search_term
 
-    res = FetchWeatherForecast.new(service_params).call
+    res = FetchWeatherForecast.call(service_params)
 
     if res.success?
       @results = res.value!
@@ -15,7 +15,7 @@ class SearchesController < ApplicationController
 
   # GET /search/autocomplete?search_term=<ADDRESS>
   def autocomplete
-    res = FetchSuggestedAddresses.new(search_term).call
+    res = FetchSuggestedAddresses.call(search_term)
     data = res.success? ? res.value! : {}
     render json: data
   end

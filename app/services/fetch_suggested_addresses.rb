@@ -2,7 +2,7 @@ require 'dry/monads'
 
 # A service object that makes an api get request with the entered search term
 # to fetch suggested addresses
-class FetchSuggestedAddresses
+class FetchSuggestedAddresses < ApplicationService
   include Dry::Monads[:try]
   attr_reader :search_term
 
