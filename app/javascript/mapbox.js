@@ -5,12 +5,14 @@
  * @param {String} input - The address search term entered by the user
  */
 async function findSuggestions(input) {
-    if (input === undefined) {
+    const ol = document.getElementById('suggestions-container');
+
+    if (input === undefined || input.length <= 5) {
+        ol.style.display = 'none';
         return;
     }
 
     const suggestions = await findAutocompleteResults(input);
-    const ol = document.getElementById('suggestions-container');
 
     // display suggestions in UI
     if (suggestions.length > 0) {
